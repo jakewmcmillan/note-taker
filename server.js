@@ -53,12 +53,12 @@ app.get('/api/notes', (req, res) => {
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} noted`);
 
-    const { title, test } = req.body;
+    const { title, text } = req.body;
 
     if (req.body) {
         const newNote = {
-            title,
-            test,
+            title: req.body.title,
+            text: req.body.text,
             note_id: uuid(),
         };
         readAndAppend(newNote, './db/db.json');
@@ -68,29 +68,22 @@ app.post('/api/notes', (req, res) => {
     }
 });
 
+app.listen(PORT, () => {
+    console.log(`App listening at http://localhost:${PORT}`);
+})
 
-
-
-
-
-
-
-function addNote(body, notesArray) {
-    const note = body;
-    notesArray.push (note)
-    return(note)
-}
+// function addNote(body, notesArray) {
+//     const note = body;
+//     notesArray.push (note)
+//     return(note)
+// }
 
 // app.get('/api/notes', (req, res) => {
 //     res.json(notes);
 //     // res.send(notes);
 // })
 
-app.post('/api/notes', (req, res) => {
-    console.log(request.body);
-    const notes = addNote(req.body, notes)
-})
-
-app.listen(PORT, () => {
-    console.log(`App listening at http://localhost:${PORT}`);
-})
+// app.post('/api/notes', (req, res) => {
+//     console.log(request.body);
+//     const notes = addNote(req.body, notes)
+// })
