@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-const notes = require('./db/db.json');
+// const notes = require('./db/db.json');
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -21,6 +21,36 @@ app.use(express.static('public'));
 app.get('/api/notes', (req, res) => {
     res.sendFile(path.join(__dirname, '../db/db.json'));
 });
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
+const readFromFile = util.promisify(fs.readFile);
+
+const writeToFile = (destination, content) => 
+    fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
+        err ? console.error(err) : console.info(`\nData written to ${destination}`)
+    );
+
+const readAndAppend = (content, file) => {
+    fs.readFile(file, 'utf8', (err, data) => {
+        if (err) {
+            console.errorr(err);
+        }else {
+            const parsedData = JSON.parse(data);
+            parsedData.push(content);
+            writeToFile(file, parsedData);
+        }
+    });
+};
+
+
+
+
+
+
+
 
 function addNote(body, notesArray) {
     const note = body;
