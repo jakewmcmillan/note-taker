@@ -45,6 +45,29 @@ const readAndAppend = (content, file) => {
     });
 };
 
+app.get('/api/notes', (req, res) => {
+    console.info(`${req.method} noted`);
+    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
+});
+
+app.post('/api/notes', (req, res) => {
+    console.info(`${req.method} noted`);
+
+    const { title, test } = req.body;
+
+    if (req.body) {
+        const newNote = {
+            title,
+            test,
+            note_id: uuid(),
+        };
+        readAndAppend(newNote, './db/db.json');
+        res.json('Note added successfully!');
+    } else {
+        res.error('Note not added');
+    }
+});
+
 
 
 
